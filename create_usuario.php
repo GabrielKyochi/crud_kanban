@@ -62,10 +62,10 @@ include("../crud_kanban/conexao/conexao.php");
     <main>
         <form id="cadastro" method="POST" action="">
             <label for="nome"></label>
-            <input type="text" name="nome" placeholder="Nome">
+            <input type="text" name="nome" placeholder="Nome" required>
 
             <label for="email"></label>
-            <input type="email" name="email" placeholder="E-mail">
+            <input type="email" name="email" placeholder="E-mail" required>
             
             <button type="submit">Adicionar usuário</button>
             
