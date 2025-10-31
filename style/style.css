@@ -1,0 +1,13 @@
+    body{
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    #cadastro{
+        background-color: rgba(228, 20, 20, 0.705);
+        display: grid;
+        width: 215px;
+        height: 140px;
+        align-items: center;
+        justify-content: center;
+        
+    }
