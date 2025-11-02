@@ -5,24 +5,6 @@ include("../crud_kanban/conexao/conexao.php");
     if($_SERVER["REQUEST_METHOD"] === "POST") {
         $nome = $_POST["nome"] ?? "";
         $email = $_POST["email"] ?? "";
-        
-        if(empty($nome)) {
-            echo "O nome é obrigatório.";
-            exit;
-        } elseif (!preg_match("/^[a-zA-ZÀ-ÿ\s]+$/", $nome)) {
-            echo "O nome deve conter apenas letras e espaços";
-        }
-
-        if(empty($email)){
-            echo "O email é obrigatório";
-            exit;
-        }
-
-        elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            echo "Formato de email inválido.";
-        } elseif(!preg_match("/^[^@]+@[^@]+\.(com)$/i", $email)){
-            echo "O email deve conter '@' e terminar com '.com'.";
-        }
 
         $sql = "SELECT * FROM usuarios WHERE email = ?";
         $stmt = $conn->prepare($sql);
@@ -38,9 +20,10 @@ include("../crud_kanban/conexao/conexao.php");
             $stmt->bind_param("ss", $nome, $email);
             if($stmt->execute()){
                 echo "Usuário cadastrado com sucesso!";
+                echo "<a href='index.php'><button>Voltar para a página principal do Kanban</button></a>";
                 exit;
             } else{
-                echo "Erro ao cadastrar usuario.";
+                echo "Erro ao cadastrar usuário.";
                 exit;
             }
         }
@@ -52,7 +35,7 @@ include("../crud_kanban/conexao/conexao.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar usuario</title>
-    <link rel="stylesheet" href="../crud_kanban/style/style.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <header>
