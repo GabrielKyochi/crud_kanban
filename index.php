@@ -14,8 +14,8 @@ include '../crud_kanban/conexao/conexao.php';
 </head>
 <body>
     <header>
-        <a href="../crud_kanban/create_usuario.php"><button>Ir para a tela de cadastrar usuários.</button></a>
-        <a href="../crud_kanban/create_atividade.php"><button>Ir para a tela de cadastrar atividades.</button></a>
+        <a href="create_usuario.php"><button>Ir para a tela de cadastrar usuários.</button></a>
+        <a href="create_tarefa.php"><button>Ir para a tela de cadastrar atividades.</button></a>
     </header>
     <main>
         <div class="grid">

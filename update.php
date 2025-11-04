@@ -45,7 +45,7 @@ $row = $result -> fetch_assoc();
 
 <body>
 
-    <form id="formulario" method="POST" action="update.php?id=<?php echo $row['id'];?>">
+    <form class="formulario" method="POST" action="update.php?id=<?php echo $row['id'];?>">
 
         <label for="descricao"></label>
         <input type="text" name="descricao" placeholder="Descrição" required>

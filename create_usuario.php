@@ -43,7 +43,7 @@ include("../crud_kanban/conexao/conexao.php");
     </header>
 
     <main>
-        <form id="formulario" method="POST" action="">
+        <form class="formulario" method="POST" action="">
             <label for="nome"></label>
             <input type="text" name="nome" placeholder="Nome" required>
 

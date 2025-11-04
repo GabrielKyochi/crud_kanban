@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
     <header></header>
     <main>
-        <form id="formulario" action="" method="POST">
+        <form action="" class="formulario" method="POST">
         <label for="descricao"></label>
         <input type="text" name="descricao" placeholder="Descrição" required>
 
