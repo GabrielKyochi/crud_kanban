@@ -2,12 +2,16 @@
 session_start();
 include '../crud_kanban/conexao/conexao.php';
 
+$sqlUsuarios = "SELECT * FROM usuarios";
+$resultUsuarios = $conn->query($sqlUsuarios);
+
 if($_SERVER["REQUEST_METHOD"] === "POST") {
         $descricao = $_POST["descricao"] ?? "";
         $nome_setor = $_POST["nome_setor"] ?? "";
         $prioridade = $_POST["prioridade"] ?? "";
         $data_cadastro = $_POST["data_cadastro"] ?? "";
         $status = $_POST["status"] ?? "";
+        $id_usuario = $_POST["id_usuario"] ?? "";
  
         $sql = "SELECT * FROM tarefas WHERE descricao = ?";
         $stmt = $conn->prepare($sql);
@@ -18,9 +22,9 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         if($result->num_rows > 0) {
             echo "Essa tarefa já está cadastrada.";
         } else{
-            $sql = "INSERT INTO tarefas (descricao, nome_setor, prioridade, data_cadastro, status) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO tarefas (descricao, nome_setor, prioridade, data_cadastro, status, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("sssss", $descricao, $nome_setor, $prioridade, $data_cadastro, $status);
+            $stmt->bind_param("ssssss", $descricao, $nome_setor, $prioridade, $data_cadastro, $status, $id_usuario);
             if($stmt->execute()){
                 echo "atividade cadastrada com sucesso!";
                 echo "<a href='index.php'><button>Voltar para a página principal do Kanban</button></a>";
@@ -32,17 +36,6 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 ?>
 
@@ -74,8 +67,19 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
         <input type="date" name="data_cadastro" placeholder="Data de cadastro" required>
 
         <label for="status"></label>
-         <select name="prioridade" id="proridade" required>
+         <select name="status" id="status" required>
             <option value="a fazer">A fazer</option>
+        </select>
+
+        <label for="id_usuario"></label>
+        <select name="id_usuario" id="id_usuario">
+            <?php
+            while($row = $resultUsuarios->fetch_assoc()){
+                $id = $row['id'];
+                $nome = $row['nome'];
+                echo "<option value='$id'>$nome</option>";
+            }
+            ?>
         </select>
 
         <button type="submit">Adicionar tarefa</button>

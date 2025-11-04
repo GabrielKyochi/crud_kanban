@@ -1,81 +1,101 @@
 <?php
-
 include '../crud_kanban/conexao/conexao.php';
 
-$id = $_GET['id'];
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $descricao = $_POST["descricao"] ?? "";
-    $nome_setor = $_POST["nome_setor"] ?? "";
-    $prioridade = $_POST["prioridade"] ?? "";
-    $data_cadastro = $_POST["data_cadastro"] ?? "";
-    $status = $_POST["status"] ?? "";
-
-    $sql = "UPDATE tarefas SET descricao ='$descricao', nome_setor ='$nome_setor', prioridade = '$prioridade', data_cadastro = '$data_cadastro', status = '$status'  WHERE id=$id";
-
-    if ($conn->query($sql) === true) {
-        echo "Tarefa atualizado com sucesso.
-        <a href='index.php'>Voltar para a página principal do Kanban.</a>
-        ";
-        exit;
-    } else {
-        echo "Erro ao tentar atualizar tarefa " . $sql . '<br>' . $conn->error;
-    }
-    $conn->close();
-    exit(); 
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+if ($id <= 0) {
+    die("O id inserido é inválido ou não foi informado");
 }
 
-$sql = "SELECT * FROM tarefas WHERE id=$id";
-$result = $conn -> query($sql);
-$row = $result -> fetch_assoc();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // pegar valores do formulário (valide/escape conforme necessário)
+    $id = intval($_POST['id']);
+    $descricao = $_POST['descricao'] ?? "";
+    $nome_setor = $_POST['nome_setor'] ?? "";
+    $prioridade = $_POST['prioridade'] ?? "";
+    $data_cadastro = $_POST['data_cadastro'] ?? "";
+    $status = $_POST['status'] ?? "";
+    $id_usuario = intval($_POST['id_usuario'] ?? 0);
 
+    $sql = "UPDATE tarefas SET descricao = ?, nome_setor = ?, prioridade = ?, data_cadastro = ?, status = ?, id_usuario = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        die("Erro no prepare: " . $conn->error);
+    }
+    // tipos: 5 strings + 2 inteiros
+    $stmt->bind_param("sssssii", $descricao, $nome_setor, $prioridade, $data_cadastro, $status, $id_usuario, $id);
 
+    if ($stmt->execute()) {
+        echo "Tarefa atualizada com sucesso. <a href='index.php'>Voltar</a>";
+        $stmt->close();
+        $conn->close();
+        exit;
+    } else {
+        echo "Erro ao atualizar: " . $stmt->error;
+        $stmt->close();
+        $conn->close();
+        exit;
+    }
+}
+
+$stmt = $conn->prepare("SELECT * FROM tarefas WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$stmt->close();
+
+if (!$row) {
+    die("Tarefa não encontrada.");
+}
+
+$resultUsuarios = $conn->query("SELECT id, nome FROM usuarios");
 ?>
-
-
+<!doctype html>
 <html lang="pt-br">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Atualizar tarefas</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-
 <body>
+    <form class="formulario" method="POST" action="update.php?id=<?php echo $row['id']; ?>">
+        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
 
-    <form class="formulario" method="POST" action="update.php?id=<?php echo $row['id'];?>">
+        <input type="text" name="descricao" placeholder="Descrição" required value="<?php echo htmlspecialchars($row['descricao']); ?>">
 
-        <label for="descricao"></label>
-        <input type="text" name="descricao" placeholder="Descrição" required>
+        <input type="text" name="nome_setor" placeholder="Nome do setor" required value="<?php echo htmlspecialchars($row['nome_setor']); ?>">
 
-        <label for="nome_setor"></label>
-        <input type="text" name="nome_setor" placeholder="Nome do setor" required>
-
-        <label for="prioridade"></label>
-        <select name="prioridade" id="proridade" required>
-             <option value="baixa">Baixa</option>
-             <option value="media">Média</option>
-             <option value="alta">Alta</option>
+        <select name="prioridade" id="prioridade" required>
+             <option value="baixa" <?php echo ($row['prioridade']=='baixa')? 'selected':''; ?>>Baixa</option>
+             <option value="media" <?php echo ($row['prioridade']=='media')? 'selected':''; ?>>Média</option>
+             <option value="alta" <?php echo ($row['prioridade']=='alta')? 'selected':''; ?>>Alta</option>
         </select>
         
-        <label for="data_cadastro"></label>
-        <input type="date" name="data_cadastro" placeholder="Data de cadastro" required>
+        <input type="date" name="data_cadastro" required value="<?php echo htmlspecialchars($row['data_cadastro']); ?>">
 
-        <label for="status"></label>
-         <select name="prioridade" id="proridade" required>
-            <option value="a fazer">A fazer</option>
-            <option value="fazendo">Fazendo</option>
-            <option value="pronto">Pronto</option>
+        <select name="status" id="status" required>
+            <option value="a fazer" <?php echo ($row['status']=='a fazer')? 'selected':''; ?>>A fazer</option>
+            <option value="fazendo" <?php echo ($row['status']=='fazendo')? 'selected':''; ?>>Fazendo</option>
+            <option value="pronto" <?php echo ($row['status']=='pronto')? 'selected':''; ?>>Pronto</option>
+        </select>
+
+        <select name="id_usuario" id="id_usuario">
+            <?php
+            if ($resultUsuarios) {
+                while($u = $resultUsuarios->fetch_assoc()){
+                    $uid = $u['id'];
+                    $nome = htmlspecialchars($u['nome']);
+                    $sel = ($uid == $row['id_usuario']) ? "selected" : "";
+                    echo "<option value='{$uid}' {$sel}>{$nome}</option>";
+                }
+            }
+            ?>
         </select>
 
         <button type="submit">Atualizar tarefa</button>
-
     </form>
 
-    <a href="index.php">Voltar para a página principal do Kanban.</a>
-
+    <a href="index.php"><button>Voltar para a página principal do Kanban.</button></a>
 </body>
-
 </html>
