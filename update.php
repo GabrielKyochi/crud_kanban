@@ -7,7 +7,7 @@ if ($id <= 0) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // pegar valores do formulário (valide/escape conforme necessário)
+  
     $id = intval($_POST['id']);
     $descricao = $_POST['descricao'] ?? "";
     $nome_setor = $_POST['nome_setor'] ?? "";
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$stmt) {
         die("Erro no prepare: " . $conn->error);
     }
-    // tipos: 5 strings + 2 inteiros
+
     $stmt->bind_param("sssssii", $descricao, $nome_setor, $prioridade, $data_cadastro, $status, $id_usuario, $id);
 
     if ($stmt->execute()) {

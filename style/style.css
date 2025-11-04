@@ -1,6 +1,8 @@
     body{
         background-color: rgba(209, 209, 209, 0.756);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        align-items: center;
+        justify-content: center;
     }
 
     .formulario{
@@ -16,6 +18,43 @@
         display: flex;
     }
 
+    .colunas_kanban{
+        border-width: 4px;
+        width: 15%;
+        height: 100%;
+        border-style: solid;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        grid-template-columns: repeat(3, 1fr);
+        margin-left: 30px;
+        margin-top: 20px;
+    }
+
     .grid{
         display: grid;
+    }
+
+    .tarefas a{
+        text-decoration: none;
+        color: white;          
+        background: transparent;
+        padding: 0;          
+        margin: 0;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .tarefas{
+        background-color: rgba(228, 20, 20, 0.705);
+        color: white;
+        display: grid;
+        text-decoration: none;
+        margin-left: 35px;
+        margin-bottom: 5px;
+        width: 215px;
+        height: 100%;
+        margin-top: 15px;
+        align-items: center;
+        justify-content: center;
     }
