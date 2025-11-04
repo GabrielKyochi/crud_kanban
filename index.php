@@ -10,6 +10,7 @@ include '../crud_kanban/conexao/conexao.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kanban</title>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <header>
@@ -18,18 +19,21 @@ include '../crud_kanban/conexao/conexao.php';
     </header>
     <main>
         <div class="grid">
-            
+        
+        <a href="update.php">Atualizar tarefa</a>
         <a href="delete.php">Deletar tarefa</a>
         </div>
 
         <div class="grid">
 
+        <a href="update.php">Atualizar tarefa</a>
         <a href="delete.php">Deletar tarefa</a>
 
         </div>
 
         <div class="grid">
 
+        <a href="update.php">Atualizar tarefa</a>
         <a href="delete.php">Deletar tarefa</a>
         </div>
 

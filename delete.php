@@ -7,7 +7,7 @@ $sql = " DELETE FROM tarefas WHERE id=$id ";
 
 if ($conn->query($sql) === true) {
     echo "Tarefa excluída com sucesso.
-        <a href='index.php'><button>Voltar para a página principal do kanban.</button></a>
+        <a href='index.php'><button>Voltar para a página principal do Kanban.</button></a>
         ";
 } else {
     echo "Erro " . $sql . '<br>' . $conn->error;

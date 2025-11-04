@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
 <body>
     <header></header>
     <main>
-        <form id="cadastro" action="" method="POST">
+        <form id="formulario" action="" method="POST">
         <label for="descricao"></label>
         <input type="text" name="descricao" placeholder="Descrição" required>
 
@@ -78,7 +78,7 @@ if($_SERVER["REQUEST_METHOD"] === "POST") {
             <option value="a fazer">A fazer</option>
         </select>
 
-        <button type="submit">Adicionar atividade</button>
+        <button type="submit">Adicionar tarefa</button>
         </form>
     </main>
     <footer><a href="../crud_kanban/index.php"><button type="submit">Voltar para a página principal do kanban</button></a></footer>
