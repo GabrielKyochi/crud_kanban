@@ -4,7 +4,8 @@ USE crud_kanban;
 CREATE TABLE usuarios(
     id INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(120) NOT NULL,
-    email VARCHAR(255) NOT NULL
+    email VARCHAR(255) NOT NULL,
+    senha varchar(128) NOT NULL
     );
     
 CREATE TABLE tarefas(
